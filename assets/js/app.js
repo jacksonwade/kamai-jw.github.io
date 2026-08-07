@@ -1,13 +1,44 @@
-// =============================================================
-//  kamai.uk  ·  app
-//  Small client-side router. Renders one page at a time into #main.
-// =============================================================
 
 (function () {
   'use strict';
 
   var main = document.getElementById('main');
   var nav  = document.getElementById('nav');
+  var root = document.documentElement;
+
+  // ── reading-page theme (dark/light) ───────────────────────
+  // Reading pages (individual paper/post) default to dark and offer a toggle;
+  // the choice is remembered. Every other page is forced light. The toggle
+  // button only shows while a reading page is open (see [data-reading] in CSS).
+  var THEME_KEY = 'kjw-reading-theme';
+  function readingPref() {
+    try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
+  }
+  function setReadingPref(t) {
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+  }
+  function applyTheme(isReading) {
+    if (isReading) {
+      root.setAttribute('data-reading', '1');
+      var pref = readingPref();
+      // First visit: honour the OS preference, else default dark.
+      if (!pref) {
+        var prefersLight = window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: light)').matches;
+        pref = prefersLight ? 'light' : 'dark';
+      }
+      root.setAttribute('data-theme', pref);
+    } else {
+      root.removeAttribute('data-reading');
+      root.removeAttribute('data-theme');   // non-reading pages are always light
+    }
+    syncToggleGlyph();
+  }
+  function syncToggleGlyph() {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.innerHTML = root.getAttribute('data-theme') === 'dark' ? '☽' : '☀';
+  }
 
   // ── helpers ───────────────────────────────────────────────
   function esc(s) {
@@ -160,7 +191,7 @@
         return { title: p.title, category: p.tag, year: p.date, desc: p.summary, url: p.url, image: p.image, slug: p.slug };
       }), 'blog');
     }
-    return '<section class="research-page"><h2>Blog</h2>' + body + '</section>';
+    return '<section class="research-page"><h2>Writing</h2>' + body + '</section>';
   }
 
   function contact() {
@@ -247,13 +278,15 @@
   }
 
   // Detail page for a single paper (research) or post (blog).
+  // Calm dark hero (kicker + medium title + italic subtitle), then serif body.
+  // No image behind or inside the article — the post/paper image is used only
+  // on the list page thumbnail, not here.
   function detailPage(item, section) {
-    var backLabel = section === 'research' ? 'Research' : 'Blog';
     var cat  = item.category || item.tag;
     var when = item.year || item.date;
     var meta = [];
-    if (cat)  meta.push('<span class="entry-cat">' + esc(cat) + '</span>');
-    if (when) meta.push('<span class="entry-date">' + esc(when) + '</span>');
+    if (when) meta.push('<span class="d-date">' + esc(when) + '</span>');
+    if (cat)  meta.push('<span class="d-tag">' + esc(cat) + '</span>');
 
     // External link buttons (e.g. { label: 'View on SSRN', url: '...' }).
     var linksArr = item.links || (item.url ? [{ label: 'View', url: item.url }] : []);
@@ -262,8 +295,8 @@
         esc(l.label) + ' &nearr;</a>';
     }).join('');
 
-    var hero = item.image
-      ? '<div class="d-hero"><img src="' + esc(item.image) + '" alt=""></div>' : '';
+    // Subtitle: the summary line, shown in italic serif under the title.
+    var sub = item.summary ? '<p class="d-sub">' + esc(item.summary) + '</p>' : '';
 
     // Body: a plain text block (parsed) or an array of block objects.
     var blocks = parseBody(item.body);
@@ -272,11 +305,12 @@
       : '<p class="note">' + esc(item.summary || item.desc || 'Coming soon.') + '</p>';
 
     return '<article class="detail">' +
-      '<a class="back-link" href="/' + section + '">&larr; ' + backLabel + '</a>' +
-      (meta.length ? '<div class="entry-head d-meta">' + meta.join('') + '</div>' : '') +
-      '<h1 class="d-title">' + esc(item.title) + '</h1>' +
-      (btns ? '<div class="d-btns">' + btns + '</div>' : '') +
-      hero +
+      '<header class="d-cover">' +
+        (meta.length ? '<div class="d-meta">' + meta.join('') + '</div>' : '') +
+        '<h1 class="d-title">' + esc(item.title) + '</h1>' +
+        sub +
+        (btns ? '<div class="d-btns">' + btns + '</div>' : '') +
+      '</header>' +
       '<div class="d-body">' + bodyBlocks + '</div>' +
     '</article>';
   }
@@ -286,7 +320,7 @@
     '':         { title: SITE.name,                render: home },
     'about':    { title: 'About',    render: about },
     'research': { title: 'Research', render: research },
-    'blog':     { title: 'Blog',     render: blog },
+    'blog':     { title: 'Writing',  render: blog },
     'contact':  { title: 'Contact',  render: contact }
   };
 
@@ -334,6 +368,11 @@
     main.classList.toggle('is-home', key === '');
     main.classList.toggle('is-contact', key === 'contact');
     main.classList.toggle('is-about', key === 'about');
+
+    // Reading pages (a paper or post) get the dark theme + a light/dark toggle;
+    // every other page is always light.
+    var isReading = !!(p.slug && (key === 'research' || key === 'blog'));
+    applyTheme(isReading);
 
     // Reset the smooth-scroll easer to the top on each page switch.
     if (window.__resetScrollEaser) window.__resetScrollEaser();
@@ -391,6 +430,18 @@
   });
 
   window.addEventListener('popstate', render);
+
+  // Theme toggle: flip the reading theme and remember it.
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      setReadingPref(next);
+      syncToggleGlyph();
+    });
+  })();
 
   render();
 

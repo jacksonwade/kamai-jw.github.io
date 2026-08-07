@@ -86,26 +86,26 @@ const SITE = {
       title:   'On solving problems nobody asked me to solve',
       slug:    'on-solving-problems',
       date:    'Jul 2026',
-      tag:     'Essay',
+      tag:     'Thoughts',
       summary: 'Why am I doing any of this?',
       image:   '/assets/img/pick-06-morris.jpg',
       body: `
-Most of the work I do in Machine Learning starts as a question nobody was paying me to answer. That is a good signal. Funds and frontier labs don't have time to research an idea no one else has had, and in those ideas lies their indispensable value to me, my edge. If a fund beats me to the work, the interesting part has already been decided for me. Not a fan.
 
-I jump on an idea as soon as possible, although they usually come to me when I am doing something completely unrelated to machine learning and/or quantitative finance. Most of my research aims to solve things about the State of The Art (SOTA) that annoy me, i.e. gaps between what a model should do and what it actually does, and ideas that feel and are obvious but I cannot find written down anywhere.
+Most of the work I do in Machine Learning (MFG) starts as a question nobody was paying me to answer. That is a good signal. Funds and frontier labs don't have time to research an idea no one else has had, and in those underdeveloped ideas lies their value to me.
+
+I jump on an idea as soon as possible, although they usually come to me when I am doing something completely unrelated to machine learning. Most of my research aims to solve things about the State of The Art (SOTA) that annoy me, i.e. gaps between what a model should do and what it actually does, and ideas that feel and are obvious but I cannot find written down anywhere.
 
 ## Why I bother
 
-I like to win on my own terms. The problems chosen for you tend to be the ones already close to solved. The frontier of my fields are fast-paced. 
+The problems chosen for you tend to be the ones already close to solved. The frontier of my fields are fast-paced, and I think the idea of a 19 year old solving frontier problems in his dorm room is an absurdly funny concept.
 
-So this blog is where I think out loud. It will be snippets of research, written plainly. I would rather be wrong in public than tidy in private. Better yet, not wrong at all.
 `,
     },
     {
       title:   'A note on noisy information',
       slug:    'noisy-information',
       date:    'Jun 2026',
-      tag:     'Research',
+      tag:     'Thoughts',
       summary: "It's noisy, what did you expect me to say?",
       image:   '/assets/img/pick-02-constellation.jpg',
       body: `
