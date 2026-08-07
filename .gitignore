@@ -7,3 +7,4 @@ node_modules/
 
 # local preview / scratch files (never shipped)
 _*.html
+.vscode/
