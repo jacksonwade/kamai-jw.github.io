@@ -150,7 +150,12 @@ img { max-width: 100%; display: block; }
 }
 /* Theme toggle — only visible on reading (detail) pages. */
 .theme-toggle {
-  display: none;                      /* hidden by default; shown on detail pages */
+  /* Always occupies its slot so the nav layout is identical on every page
+     (no reflow/shift). On non-reading pages it is simply hidden + inert; the
+     reading-page rule below makes it visible again. */
+  display: inline-flex;
+  visibility: hidden;
+  pointer-events: none;
   align-items: center;
   justify-content: center;
   width: 32px; height: 32px;
@@ -166,7 +171,7 @@ img { max-width: 100%; display: block; }
   opacity: 0.85;
 }
 .theme-toggle:hover { opacity: 1; }
-:root[data-reading="1"] .theme-toggle { display: inline-flex; }
+:root[data-reading="1"] .theme-toggle { visibility: visible; pointer-events: auto; }
 
 /* ── Main ───────────────────────────────────────────────── */
 /* Clear gap below the header before content begins (anthropic-like).
