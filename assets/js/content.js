@@ -101,24 +101,6 @@ The problems chosen for you tend to be the ones already close to solved. The fro
 
 `,
     },
-    {
-      title:   'A note on noisy information',
-      slug:    'noisy-information',
-      date:    'Jun 2026',
-      tag:     'Thoughts',
-      summary: "It's noisy, what did you expect me to say?",
-      image:   '/assets/img/pick-02-constellation.jpg',
-      body: `
-
-A lot of real-time decisions get made with information that is incomplete, late, and partly wrong. 
-
-## The point
-
-You do not have to remove the noise to use it. The shape of the uncertainty is itself information. A decision that stays correct across the plausible versions of the world tends to beat one tuned perfectly to a single guess.
-
-That is essentially at the forefront of what I work on, namely Mean-Field Games.
-`,
-    },
   ],
 
 };
