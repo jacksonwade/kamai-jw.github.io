@@ -30,7 +30,7 @@
       root.setAttribute('data-theme', pref);
     } else {
       root.removeAttribute('data-reading');
-      root.removeAttribute('data-theme');   // non-reading pages are always light
+      root.setAttribute('data-theme', 'dark');   // PREVIEW: whole site black
     }
     syncToggleGlyph();
   }
@@ -117,38 +117,43 @@
   }
 
   // ── page renderers ────────────────────────────────────────
+  // Landing = About-style: short blurb, then News, then Latest publications.
   function home() {
     var work = SITE.research || [];
-    var posts = SITE.posts || [];
-    var sections = '';
+    var news = SITE.news || [];
 
-    if (work.length) {
-      var top = work.slice(0, 3);
-      sections +=
-        '<section class="featured reveal">' +
-          '<h2 class="sec-h">Selected research</h2>' +
-          entriesMarkup(top, 'research') +
-          (work.length > top.length
-            ? '<a class="more-link" href="/research">All research &rarr;</a>' : '') +
-        '</section>';
-    }
+    // Blurb may be a string or an array of paragraphs.
+    var blurbArr = Array.isArray(SITE.blurb) ? SITE.blurb : (SITE.blurb ? [SITE.blurb] : []);
+    var blurb = blurbArr.length
+      ? '<div class="landing-blurb">' +
+          blurbArr.map(function (p) { return '<p>' + inlineLinks(p) + '</p>'; }).join('') +
+        '</div>'
+      : '';
 
-    if (posts.length) {
-      var recent = posts.slice(0, 3);
-      sections +=
-        '<section class="home-writing reveal">' +
-          '<h2 class="sec-h">Recent writing</h2>' +
-          postsListMarkup(recent) +
-          (posts.length > recent.length
-            ? '<a class="more-link" href="/blog">All posts &rarr;</a>' : '') +
-        '</section>';
-    }
+    var newsSec = news.length
+      ? '<section class="landing-sec reveal">' +
+          '<h2 class="sec-h">News</h2>' +
+          '<div class="newslist">' +
+            news.map(function (n) {
+              return '<div class="news-row">' +
+                '<span class="news-date">' + esc(n.date || '') + '</span>' +
+                '<span class="news-text">' + inlineLinks(n.text || '') + '</span>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</section>'
+      : '';
 
-    return '' +
-      '<section class="hero">' +
-        '<h1>' + heroMarkup(SITE.hero) + '</h1>' +
-      '</section>' +
-      sections;
+    var pubsSec =
+      '<section class="landing-sec reveal">' +
+        '<h2 class="sec-h">Latest publications</h2>' +
+        (work.length
+          ? entriesMarkup(work.slice(0, 3), 'research') +
+            (work.length > 3 ? '<a class="more-link" href="/research">All publications &rarr;</a>' : '')
+          : '<p class="note">Nothing yet.</p>') +
+      '</section>';
+
+    return '<section class="landing">' + blurb + newsSec + pubsSec + '</section>';
   }
 
   function about() {

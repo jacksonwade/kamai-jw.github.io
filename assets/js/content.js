@@ -9,6 +9,17 @@ const SITE = {
   // Words (or a phrase) wrapped in {curly braces} are underlined and link to Research.
   hero: 'I work on {mean-field games}.',
 
+  // Landing page (About-as-home): a short blurb, then News, then Latest publications.
+  blurb: [
+    'I work on mean-field games and statistical mechanics.',
+    'I lead the team at Tausen Research.',
+  ],
+  news: [
+    { date: 'August 2026', text: 'Incoming Quantitative Researcher at a US hedge fund, starting 2027.' },
+    { date: 'July 2026',   text: 'Research Scientist Intern at Dubsof, Dublin.' },
+    { date: 'April 2026',  text: 'Quantitative Strategist Spring Intern at Goldman Sachs, London.' },
+  ],
+
   // About page paragraphs. First person, to match the rest of the site.
   about: [
     'My study is on mean-field game theory, especially what happens when the agents are physically constrained.',
@@ -19,7 +30,7 @@ const SITE = {
   // Research page intro: the research-direction statement (shown above the list).
   // Field-level only, no unpublished specifics. Add/remove paragraphs freely.
   researchIntro: [
-    'I work on mean-field games where the agents are physically constrained, like robotic swarms, interacting particles, or even financial markets.',
+    'For any enquiries, you can get in contact via email.'
   ],
 
   // Research entries, ordered by importance (most important first).
@@ -81,26 +92,6 @@ const SITE = {
   //   ![caption](/assets/img/x.jpg)  -> an image with caption
   // Apostrophes and quotes work as-is, no escaping. (An array of block
   // objects still works too, if you ever want that instead.)
-  posts: [
-    {
-      title:   'On solving problems nobody asked me to solve',
-      slug:    'on-solving-problems',
-      date:    'Jul 2026',
-      tag:     'Thoughts',
-      summary: 'Why am I doing any of this?',
-      image:   '/assets/img/pick-06-morris.jpg',
-      body: `
-
-Most of the work I do in Machine Learning (MFG) starts as a question nobody was paying me to answer. That is a good signal. Funds and frontier labs don't have time to research an idea no one else has had, and in those underdeveloped ideas lies their value to me.
-
-I jump on an idea as soon as possible, although they usually come to me when I am doing something completely unrelated to machine learning. Most of my research aims to solve things about the State of The Art (SOTA) that annoy me, i.e. gaps between what a model should do and what it actually does, and ideas that feel and are obvious but I cannot find written down anywhere.
-
-## Why I bother
-
-The problems chosen for you tend to be the ones already close to solved. The frontier of my fields are fast-paced, and I think the idea of a 19 year old solving frontier problems in his dorm room is an absurdly funny concept.
-
-`,
-    },
-  ],
+  posts: [],
 
 };
